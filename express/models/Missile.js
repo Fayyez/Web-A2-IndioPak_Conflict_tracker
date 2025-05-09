@@ -1,0 +1,11 @@
+import mongoose from "mongoose";
+
+const missileSchema = new mongoose.Schema({
+    name: {type: mongoose.Schema.Types.String, required: true, unique: true},
+    range: {type: mongoose.Schema.Types.Number, required: true},
+    payload: {type: mongoose.Schema.Types.Number},
+    country: {type: mongoose.Schema.Types.ObjectId, ref: "Country", required: true},
+}, {timestamps: true});
+
+const Missile = mongoose.model("Missile", missileSchema);
+export default Missile;
