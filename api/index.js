@@ -13,7 +13,7 @@ import Missile from "./models/Missile.js";
 
 // confirgue db
 const db_uri = process.env.MONGO_URI;
-mongoose.connect(db_uri,)
+mongoose.connect("mongodb+srv://faiz:X9L7m2SpZS3tYTWU@studycluster.4qlslxi.mongodb.net/?retryWrites=true&w=majority&appName=StudyCluster",)
     .then(() => console.log("MongoDB connected"))
     .catch((err) => console.log(err));
 // create server
