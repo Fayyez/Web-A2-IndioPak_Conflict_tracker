@@ -27,9 +27,10 @@ const MissileAddForm = ({ onSuccess }) => {
         e.preventDefault();
         try {
             await axios.post('http://localhost:3000/missile', formData);
-            setFormData({ name: '', range: 'short', payload: 0, countryname: '' });
-            if (onSuccess) onSuccess();
+            //setFormData({ name: '', range: 'short', payload: 0, countryname: '' });
+            alert("Missile added successfully");
         } catch (error) {
+            alert("Error adding missile - name must be unique");
             console.error('Error adding missile:', error);
         }
     };

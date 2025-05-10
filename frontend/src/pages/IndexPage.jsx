@@ -2,12 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const IndexPage = () => {
-    const [indexData, setIndexData] = useState({
-        field: '',
-        unique: false
-    });
     const [indexes, setIndexes] = useState([]);
     const [message, setMessage] = useState('');
+    const [error, setError] = useState('');
 
     // Fetch all indexes on component mount
     useEffect(() => {
@@ -17,80 +14,66 @@ const IndexPage = () => {
     // Get all indexes
     const fetchIndexes = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/missile/indexes');
-            setIndexes(response.data);
+            setError('');
+            setMessage('');
+            const response = await axios.get('http://localhost:3000/missile/index');
+            console.log("Fetched indexes:", response.data);
+            setIndexes(Object.keys(response.data));
         } catch (error) {
-            setMessage('Error fetching indexes: ' + error.message);
+            setError('Error fetching indexes: ' + (error.response?.data?.error || error.message));
         }
     };
 
-    // Create new index
-    const handleCreateIndex = async (e) => {
-        e.preventDefault();
+    // Create range index
+    const handleCreateIndex = async () => {
         try {
-            await axios.post('http://localhost:3000/missile/createindex', {
-                field: indexData.field,
-                unique: indexData.unique
-            });
-            setMessage('Index created successfully');
-            setIndexData({ field: '', unique: false });
-            fetchIndexes(); // Refresh the list of indexes
+            setError('');
+            const response = await axios.post('http://localhost:3000/missile/index');
+            setMessage(response.data.message || 'Range index created successfully');
+            fetchIndexes();
         } catch (error) {
-            setMessage('Error creating index: ' + error.message);
+            setError('Error creating index: ' + (error.response?.data?.error || error.message));
         }
     };
 
-    // Delete index
-    const handleDeleteIndex = async (indexName) => {
+    // Delete range index
+    const handleDeleteIndex = async () => {
         try {
-            await axios.delete(`http://localhost:3000/missile/deleteindex/${indexName}`);
-            setMessage('Index deleted successfully');
-            fetchIndexes(); // Refresh the list of indexes
+            setError('');
+            const response = await axios.delete('http://localhost:3000/missile/index');
+            setMessage(response.data.message || 'Range index deleted successfully');
+            fetchIndexes();
         } catch (error) {
-            setMessage('Error deleting index: ' + error.message);
+            setError('Error deleting index: ' + (error.response?.data?.error || error.message));
         }
     };
 
     return (
         <div>
             <h2>Manage Indexes</h2>
-            {message && <div>{message}</div>}
+            {message && <div style={{ color: 'green' }}>{message}</div>}
+            {error && <div style={{ color: 'red' }}>{error}</div>}
 
-            {/* Create Index Form */}
             <div>
-                <h3>Create New Index</h3>
-                <form onSubmit={handleCreateIndex}>
-                    <input
-                        type="text"
-                        placeholder="Field Name"
-                        value={indexData.field}
-                        onChange={(e) => setIndexData({...indexData, field: e.target.value})}
-                        required
-                    />
-                    <label>
-                        <input
-                            type="checkbox"
-                            checked={indexData.unique}
-                            onChange={(e) => setIndexData({...indexData, unique: e.target.checked})}
-                        />
-                        Unique Index
-                    </label>
-                    <button type="submit">Create Index</button>
-                </form>
+                <h3>Index Operations</h3>
+                <button onClick={handleCreateIndex}>Create Range Index</button>
+                <button onClick={handleDeleteIndex}>Delete Range Index</button>
+                <button onClick={fetchIndexes}>GET Indexes</button>
             </div>
 
-            {/* Display Existing Indexes */}
             <div>
                 <h3>Existing Indexes</h3>
-                <button onClick={fetchIndexes}>Refresh Indexes</button>
-                <ul>
-                    {indexes.map((index, i) => (
-                        <li key={i}>
-                            {index.name} ({index.unique ? 'Unique' : 'Non-unique'})
-                            <button onClick={() => handleDeleteIndex(index.name)}>Delete</button>
-                        </li>
-                    ))}
-                </ul>
+                {indexes.length > 0 ? (
+                    <ul>
+                        {indexes.map((index, i) => (
+                            <li key={i}>
+                                {index}
+                            </li>
+                        ))}
+                    </ul>
+                ) : (
+                    <p>No indexes found</p>
+                )}
             </div>
         </div>
     );

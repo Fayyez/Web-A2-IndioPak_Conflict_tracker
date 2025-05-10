@@ -104,6 +104,7 @@ const ViewPage = () => {
                 />
                 <button onClick={handleFindOne}>Find One</button>
                 <button onClick={fetchAllMissiles}>Find All</button>
+                <button onClick={fetchCount}>Count Missiles</button>
             </div>
 
             {/* Limit and Skip Section */}

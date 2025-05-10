@@ -34,6 +34,11 @@ function App() {
           <Route path='/list_drop' element={<ListDropPage/>} />
           {/* for aggregate, rename collection = 2 */}
           <Route path='/others' element={<OthersPage/>} />
+          {/* eror 404 */}
+          <Route path='*' element={<>
+            <h1>404</h1>
+            <h2>Page Not Found</h2>
+            </>} />
         </Routes>
       </div>
     </BrowserRouter>

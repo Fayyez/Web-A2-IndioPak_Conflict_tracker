@@ -1,5 +1,6 @@
 import React from 'react'
 import axios from 'axios'
+import { useState } from 'react';
 
 const ListDropPage = () => {
     const [collectionlist, setCollectionList] = useState([]);
@@ -22,8 +23,8 @@ const ListDropPage = () => {
     <button onClick={handlelist}>List Collections</button>
     <button onClick={handledrop}>Drop Missiles Collection</button>
     <ul>
-        {collectionlist.map((item) => (
-            <li key={item}>{item}</li>
+        {collectionlist.map((item, ind) => (
+            <li key={ind}>{item.name}</li>
         ))}
     </ul>
     </>

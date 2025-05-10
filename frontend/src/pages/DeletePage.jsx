@@ -1,18 +1,22 @@
 import axios from 'axios'
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 const DeletePage = () => {
     const [name, setName] = useState('');
     const handleDelete = async (e) => {
         e.preventDefault();
-        const response = await axios.delete(`http://localhost:5000/api/missiles/${name}`);
-        console.log(response.data);
+        axios.delete(`http://localhost:3000/missile/${name}`).then((res) => {
+            console.log(res.data);
+            alert("Deleted successfully");
+        }).catch((err) => {
+            console.log("error while deleting one");
+        })
     }
 
     const handleDeleteAll = async (e) => {
         e.preventDefault();
         // send the name in body
-        axios.delete(`http://localhost:5000/api/missiles/many`, {
+        axios.delete(`http://localhost:3000/missile/many`, {
             data: {
                 name: name
             }
@@ -30,3 +34,5 @@ const DeletePage = () => {
     </>
   )
 }
+
+export default DeletePage;

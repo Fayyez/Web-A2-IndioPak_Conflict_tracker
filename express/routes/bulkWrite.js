@@ -59,7 +59,7 @@ export const bulkWrite = async (req, res) => {
                 return {
                     insertOne: {
                         document: {
-                            name: missile.name,
+                            name: missile.name.toLowerCase(),
                             range: missile.range,
                             payload: missile.payload,
                             country: country._id
