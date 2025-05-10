@@ -98,9 +98,9 @@ router.get("/skip/:skip", async (req, res) => {
     }
 });
 // sort
-router.get("/sort/:sort", async (req, res) => {
+router.get("/sort", async (req, res) => {
     try {
-        const missiles = await Missile.find().sort({ name: req.params.sort }).populate("country");
+        const missiles = await Missile.find().sort({ name: 1 }).populate("country");
         // send back all the data on missile
         res.status(200).json(missiles);
     } catch (error) {

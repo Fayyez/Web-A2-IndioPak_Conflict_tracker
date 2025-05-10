@@ -2,6 +2,15 @@ import './App.css'
 import { BrowserRouter, Route, Routes } from 'react-router'
 import axios from 'axios'
 import Home from './pages/Home'
+import AddPage from './pages/AddPage'
+import ViewPage from './pages/ViewPage'
+import DeletePage from './pages/DeletePage'
+import UpdatePage from './pages/UpdatePage'
+import PutPage from './pages/PutPage'
+import IndexPage from './pages/IndexPage'
+import ListDropPage from './pages/ListDropPage'
+import OthersPage from './pages/OthersPage'
+
 function App() {
 
   return (
