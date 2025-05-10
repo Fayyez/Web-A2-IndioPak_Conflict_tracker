@@ -1,5 +1,5 @@
-import Missile from "../models/Missile";
-import Country from "../models/Country";
+import Missile from "../models/Missile.js";
+import Country from "../models/Country.js";
 import { Router } from "express";
 import axios from "axios";
 
@@ -291,3 +291,52 @@ router.delete("/findand/:name", async (req, res) => {
         res.status(400).json({ error: error.message });
     }
 })
+
+// indox methods (create, get, drop) - works on the missle collection only on the range attribute
+router.post("/index", async (req, res) => {
+    try {
+        const index = await Missile.createIndex({ range: 1 });
+        console.log("index created", index);
+        res.status(200).json(index);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+})
+router.get("/index", async (req, res) => {
+    try {
+        const index = await Missile.getIndexes();
+        console.log("index data", index);
+        res.status(200).json(index);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+router.delete("/index", async (req, res) => {
+    try {
+        const index = await Missile.dropIndex("name_1");
+        console.log("index dropped", index);
+        res.status(200).json(index);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+})
+
+// agggregate by range
+router.get("/aggregate", async (req, res) => {
+    try {
+        const missiles = await Missile.aggregate([
+            {
+                $group: {
+                    _id: "$range",
+                    count: { $sum: 1 }
+                }
+            }
+        ]);
+        console.log("aggregate data by range:", missiles);
+        res.status(200).json(missiles);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+})
+
+export default router;

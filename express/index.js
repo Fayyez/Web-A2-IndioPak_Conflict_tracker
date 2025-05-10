@@ -3,10 +3,11 @@
 import { config } from "dotenv";
 config();
 
-import {countryRouter} from "./routes/countryRoutes.js";
-import {missileRouter} from "./routes/missleRoutes.js";
+import countryRouter from "./routes/countryRoutes.js";
+import missileRouter from "./routes/missleRoutes.js";
 import express from "express";
 import mongoose from "mongoose";
+import { bulkWrite } from "./routes/bulkWrite.js";
 
 // confirgue db
 const db_uri = process.env.MONGO_URI;
@@ -23,19 +24,68 @@ app.use("/missile", missileRouter);
 // other methods
 
 // listcollections
+app.get("/listcollections", async (req, res) => {
+    try {
+        const collections = await mongoose.connection.db.listCollections().toArray();
+        console.log("all collections", collections);
+        res.status(200).json(collections);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+})
 
-// drop
+// drop - drops the missile collection always
+app.get("/dropmissiles", async (req, res) => {
+    try {
+        // drop the missile collection of the database
+        const collection = await mongoose.connection.db.collection("Missile");
+        await collection.drop();
+        console.log("Missile collection dropped");
+        res.status(200).json({ message: `Collection ${collection} dropped` });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
 
-// indox methods (create, get, drop)
-
-// bulkwrite method
-
-// aggregate
+// bulkwrite method - call the bulk write method
+app.get("/bulkwrite", async (req, res) => {
+    try {
+        // call the bulk write method
+        const result = await bulkWrite(req, res);
+        console.log("Bulk write successful");
+        res.status(200).json({ message: "Bulk write successful" });
+    } catch (error) {
+        res.status(400).json("bulk write failed");
+    }
+});
 
 // rename collection
+app.get("/rename", async (req, res) => {
+    try {
+        // if name is Missile get to rename it to Rockets andvce versa
+        const collections = await mongoose.connection.db.listCollections().toArray();
+        const collectionNames = collections.map((collection) => collection.name);
+        if (!collectionNames.includes("Rockets")) {
+            // renma eto missle
+            await mongoose.connection.db.collection("Rockets").rename("Missile");
+            console.log("Rockets collection renamed to Missile");
+        } else if (!collectionNames.includes("Missile")) {
+            // rename to rockets
+            await mongoose.connection.db.collection("Missile").rename("Rockets");
+            console.log("Missile collection renamed to Rockets");
+        } else {
+            console.log("rename failed");
+            throw new Error("cant rename collection");
+        }
+        res.status(200).json({ message: "Renamed successfully" });
+    }
+    catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
 
-const PORT = process.env.PORT || 3000;
 // stasrt server
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });

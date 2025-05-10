@@ -7,5 +7,4 @@ const missileSchema = new mongoose.Schema({
     country: {type: mongoose.Schema.Types.ObjectId, ref: "Country", required: true},
 }, {timestamps: true});
 
-const Missile = mongoose.model("Missile", missileSchema);
-export default Missile;
+export default mongoose.model("Missile", missileSchema);

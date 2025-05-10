@@ -1,6 +1,5 @@
 import { Router } from "express";
-import Country from "../models/Country";
-import axios from "axios";
+import Country from "../models/Country.js";
 // set all routes to get, post, get by name, delete country by name in this file
 
 const router = Router();
@@ -56,3 +55,5 @@ router.delete("/:name", async (req, res) => {
         res.status(500).json({message: error.message});
     }
 });
+
+export default router;

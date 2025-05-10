@@ -1,34 +1,34 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
-
+import { BrowserRouter, Route, Routes } from 'react-router'
+import axios from 'axios'
+import Home from './pages/Home'
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <BrowserRouter>
+      <div className="App">
+        <h1>Indo-Pak Conflict Missiles Tracker</h1>
+        <Routes>
+          <Route path='/' element={<Home/>} />
+          {/* for add one, add many = 2*/}
+          <Route path='/add' element={<AddPage/>} />
+          {/* for find, findone, find limit, find skip, sort, distinct, count by label operations testing = 7 */}
+          <Route path='/view' element={<ViewPage/>} />
+          {/* for delete one, delete many, find one and delete = 3 */}
+          <Route path="/delete" element={<DeletePage/>} />
+          {/* for update one, update many, find one and update = 3*/}
+          <Route path='/update' element={<UpdatePage/>} />
+          {/* for replace one, find one and replace = 2 */}
+          <Route path='/put' element={<PutPage/>} />
+          {/* for create index, get index, delete index = 3 */}
+          <Route path='/index' element={<IndexPage/>} />
+          {/* for list collections, drop collection of missles = 2*/}
+          <Route path='/list_drop' element={<ListDropPage/>} />
+          {/* for aggregate, rename collection = 2 */}
+          <Route path='/others' element={<OthersPage/>} />
+        </Routes>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </BrowserRouter>
   )
 }
 
