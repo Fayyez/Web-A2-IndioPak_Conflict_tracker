@@ -132,7 +132,7 @@ router.get("/count", async (req, res) => {
 
 // // update page methods
 // update one
-router.put("/:name", async (req, res) => {
+router.patch("/:name", async (req, res) => {
     try {
         // use the UpdateOne method of databse
         const oldmissile = await Missile.findOne({ name: req.params.name.toLowerCase() });
@@ -158,7 +158,7 @@ router.put("/:name", async (req, res) => {
 })
 
 // update many
-router.put("/many", async (req, res) => {
+router.patch("/many", async (req, res) => {
     try {
         const { name, range, payload, countryname } = req.body;
         const missiles = await Missile.updateMany(
@@ -181,7 +181,7 @@ router.put("/many", async (req, res) => {
     }
 })
 // find one and update, use findoneandupdate method
-router.put("/many/:name", async (req, res) => {
+router.patch("/findand/:name", async (req, res) => {
     try {
         const {name, range, payload, countryname} = req.body;
         const missile = await Missile.findOneAndUpdate(
@@ -208,8 +208,26 @@ router.put("/many/:name", async (req, res) => {
 
 // // raplace page methods
 // replace one
-// find one and replace
 router.put("/replace/:name", async (req, res) => {
+    try {
+        const { name, range, payload, countryname } = req.body;
+        const missile = await Missile.replaceOne(
+            { name: req.params.name.toLowerCase() },
+            {
+                name,
+                range,
+                payload,
+                country: countryname
+            }
+        );
+        // send back the data on missile
+        res.status(200).json(missile);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+})
+// find one and replace
+router.put("/findand/:name", async (req, res) => {
     try {
         const {name, range, payload, countryname} = req.body;
         const missile = await Missile.findOneAndReplace(
@@ -234,5 +252,42 @@ router.put("/replace/:name", async (req, res) => {
 
 // // delete page methods4
 // delete one
+router.delete("/:name", async (req, res) => {
+    try {
+        const missile = await Missile.deleteOne({ name: req.params.name.toLowerCase() });
+        if (!missile) {
+            return res.status(404).json({ error: "Missile not found" });
+        }
+        // send back the data on missile
+        res.status(200).json(missile);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+})
 // delete many
+router.delete("/many", async (req, res) => {
+    try {
+        const { name } = req.body;
+        const missiles = await Missile.deleteMany({ name: name.toLowerCase() });
+        if (!missiles) {
+            return res.status(404).json({ error: "Missile not found" });
+        }
+        // send back the data on missile
+        res.status(200).json(missiles);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+})
 // find one and delete
+router.delete("/findand/:name", async (req, res) => {
+    try {
+        const missile = await Missile.findOneAndDelete({ name: req.params.name.toLowerCase() });
+        if (!missile) {
+            return res.status(404).json({ error: "Missile not found" });
+        }
+        // send back the data on missile
+        res.status(200).json(missile);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+})
