@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import axiosInstance from '../axiosInstance';
 
 const PutPage = () => {
     const [replaceData, setReplaceData] = useState({
@@ -22,12 +22,7 @@ const PutPage = () => {
     const handleReplace = async (e) => {
         e.preventDefault();
         try {
-            await axios.put(`http://localhost:3000/missile/replace/${replaceData.name}`, {
-                name: replaceData.newname,
-                range: replaceData.range,
-                payload: replaceData.payload,
-                countryname: replaceData.countryname
-            });
+            await axiosInstance.put(`missile/replace/${replaceData.name}`, replaceData);
             setMessage('Missile replaced successfully');
             setReplaceData({ name: '', newname: '', range: 'short', payload: 0, countryname: '' });
         } catch (error) {
@@ -39,12 +34,7 @@ const PutPage = () => {
     const handleFindAndReplace = async (e) => {
         e.preventDefault();
         try {
-            await axios.put(`http://localhost:3000/missile/findand/${findAndReplaceData.name}`, {
-                name: findAndReplaceData.newname,
-                range: findAndReplaceData.range,
-                payload: findAndReplaceData.payload,
-                countryname: findAndReplaceData.countryname
-            });
+            await axiosInstance.put(`missile/findand/${findAndReplaceData.name}`, findAndReplaceData);
             setMessage('Missile found and replaced successfully');
             setFindAndReplaceData({ name: '', newname: '', range: 'short', payload: 0, countryname: '' });
         } catch (error) {

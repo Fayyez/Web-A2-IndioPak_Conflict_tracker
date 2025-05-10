@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axiosInstance from '../axiosInstance';
 
 const IndexPage = () => {
     const [indexes, setIndexes] = useState([]);
@@ -16,7 +16,7 @@ const IndexPage = () => {
         try {
             setError('');
             setMessage('');
-            const response = await axios.get('http://localhost:3000/missile/index');
+            const response = await axiosInstance.get('missile/index');
             console.log("Fetched indexes:", response.data);
             setIndexes(Object.keys(response.data));
         } catch (error) {
@@ -28,7 +28,7 @@ const IndexPage = () => {
     const handleCreateIndex = async () => {
         try {
             setError('');
-            const response = await axios.post('http://localhost:3000/missile/index');
+            const response = await axiosInstance.post('missile/index');
             setMessage(response.data.message || 'Range index created successfully');
             fetchIndexes();
         } catch (error) {
@@ -40,7 +40,7 @@ const IndexPage = () => {
     const handleDeleteIndex = async () => {
         try {
             setError('');
-            const response = await axios.delete('http://localhost:3000/missile/index');
+            const response = await axiosInstance.delete('missile/index');
             setMessage(response.data.message || 'Range index deleted successfully');
             fetchIndexes();
         } catch (error) {

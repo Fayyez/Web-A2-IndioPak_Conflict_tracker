@@ -67,7 +67,7 @@ app.get("/rename", async (req, res) => {
     try {
         // if name is Missile get to rename it to Rockets and vice versa
         console.log("trying to rename missile wali collection here");
-        
+
         const collections = await mongoose.connection.db.listCollections().toArray();
         const collectionNames = collections.map((collection) => collection.name);
         if (collectionNames.includes("rockets")) {

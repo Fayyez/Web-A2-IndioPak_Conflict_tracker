@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import axiosInstance from '../axiosInstance';
 
 const UpdatePage = () => {
     const [updateData, setUpdateData] = useState({
@@ -28,12 +28,7 @@ const UpdatePage = () => {
     const handleUpdate = async (e) => {
         e.preventDefault();
         try {
-            await axios.patch(`http://localhost:3000/missile/${updateData.name}`, {
-                newname: updateData.newname,
-                range: updateData.range,
-                payload: updateData.payload,
-                countryname: updateData.countryname
-            });
+            await axiosInstance.patch(`missile/${updateData.name}`, updateData);
             setMessage('Missile updated successfully');
             setUpdateData({ name: '', newname: '', range: 'short', payload: 0, countryname: '' });
         } catch (error) {
@@ -45,11 +40,11 @@ const UpdatePage = () => {
     const handleUpdateMany = async (e) => {
         e.preventDefault();
         try {
-            await axios.patch('http://localhost:3000/missile/many', updateManyData);
+            await axiosInstance.patch('missile/many', updateManyData);
             setMessage('Multiple missiles updated successfully');
             setUpdateManyData({ name: '', range: 'short', payload: 0, countryname: '' });
         } catch (error) {
-            setMessage('Error updating missiles: ' + error.message);
+            setMessage('Error updating multiple missiles: ' + error.message);
         }
     };
 
@@ -57,12 +52,7 @@ const UpdatePage = () => {
     const handleFindAndUpdate = async (e) => {
         e.preventDefault();
         try {
-            await axios.patch(`http://localhost:3000/missile/findand/${findAndUpdateData.name}`, {
-                name: findAndUpdateData.newname,
-                range: findAndUpdateData.range,
-                payload: findAndUpdateData.payload,
-                countryname: findAndUpdateData.countryname
-            });
+            await axiosInstance.patch(`missile/findand/${findAndUpdateData.name}`, findAndUpdateData);
             setMessage('Missile found and updated successfully');
             setFindAndUpdateData({ name: '', newname: '', range: 'short', payload: 0, countryname: '' });
         } catch (error) {

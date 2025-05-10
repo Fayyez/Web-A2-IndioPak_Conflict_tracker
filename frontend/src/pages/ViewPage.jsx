@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axiosInstance from '../axiosInstance';
 
 const ViewPage = () => {
     const [missiles, setMissiles] = useState([]);
@@ -18,7 +18,7 @@ const ViewPage = () => {
     // Fetch all missiles
     const fetchAllMissiles = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/missile');
+            const response = await axiosInstance.get('missile/');
             setMissiles(response.data);
         } catch (error) {
             console.error('Error fetching missiles:', error);
@@ -28,7 +28,7 @@ const ViewPage = () => {
     // Fetch count
     const fetchCount = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/missile/count');
+            const response = await axiosInstance.get('missile/count');
             setCount(response.data);
         } catch (error) {
             console.error('Error fetching count:', error);
@@ -39,7 +39,7 @@ const ViewPage = () => {
     const handleFindOne = async () => {
         if (!searchName) return;
         try {
-            const response = await axios.get(`http://localhost:3000/missile/${searchName}`);
+            const response = await axiosInstance.get(`missile/${searchName}`);
             setMissiles([response.data]);
         } catch (error) {
             console.error('Error finding missile:', error);
@@ -50,7 +50,7 @@ const ViewPage = () => {
     // Apply limit
     const handleLimit = async () => {
         try {
-            const response = await axios.get(`http://localhost:3000/missile/limit/${limit}`);
+            const response = await axiosInstance.get(`missile/limit/${limit}`);
             setMissiles(response.data);
         } catch (error) {
             console.error('Error applying limit:', error);
@@ -60,7 +60,7 @@ const ViewPage = () => {
     // Apply skip
     const handleSkip = async () => {
         try {
-            const response = await axios.get(`http://localhost:3000/missile/skip/${skip}`);
+            const response = await axiosInstance.get(`missile/skip/${skip}`);
             setMissiles(response.data);
         } catch (error) {
             console.error('Error applying skip:', error);
@@ -70,7 +70,7 @@ const ViewPage = () => {
     // Sort missiles
     const handleSort = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/missile/sort');
+            const response = await axiosInstance.get('missile/sort');
             setMissiles(response.data);
         } catch (error) {
             console.error('Error sorting missiles:', error);
@@ -80,7 +80,7 @@ const ViewPage = () => {
     // Get distinct ranges
     const handleDistinct = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/missile/distinct');
+            const response = await axiosInstance.get('missile/distinct');
             setDistinctRanges(response.data);
         } catch (error) {
             console.error('Error getting distinct ranges:', error);

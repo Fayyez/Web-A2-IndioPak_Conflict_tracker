@@ -1,6 +1,6 @@
 // this page uses the rename and aggregate endpoint
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axiosInstance from '../axiosInstance';
 
 const OthersPage = () => {
     const [aggregateData, setAggregateData] = useState([]);
@@ -16,7 +16,7 @@ const OthersPage = () => {
     const fetchAggregateData = async () => {
         try {
             setError('');
-            const response = await axios.get('http://localhost:3000/missile/aggregate');
+            const response = await axiosInstance.get('missile/aggregate');
             setAggregateData(response.data);
         } catch (error) {
             setError('Error fetching aggregate data: ' + (error.response?.data?.error || error.message));
@@ -28,7 +28,7 @@ const OthersPage = () => {
     const handleRename = async () => {
         try {
             setError('');
-            const response = await axios.get('http://localhost:3000/rename');
+            const response = await axiosInstance.get('rename');
             setMessage(response.data.message || 'Collection renamed successfully');
             // Refresh aggregate data after rename
             fetchAggregateData();
